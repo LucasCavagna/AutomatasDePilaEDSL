@@ -1,0 +1,22 @@
+ 
+{-Automatas de pila definidos estructuralmente errores-}
+defA A = I,A,B,C,D|a,b,v,y,u|a,x,a,d,e|
+        (I,/,/,x,A)-(A,a,/,a,A)-(A,/,/,/,B)-(B,b,a,/,B)-(B,/,x,/,C)|I|I,C,D,Q;
+        --{a^n b^n} 
+        
+defA B = I,A,B,C,D|a,b,v,y,u|a,x,a,d,e|
+        (I,/,/,x,A)-(A,a,/,a,A)-(A,/,/,/,B)-(B,b,a,/,B)-(B,/,x,/,A)|o|I,C,D;
+        --{a^n b^n}
+        
+defA C = I,A,B,C,D|a,b,v,y,u|a,x,a,d,e|
+        (I,/,/,x,A)-(A,a,/,a,A)-(A,/,/,/,B)-(B,b,a,/,B)-(B,/,z,/,A)|I|I,C,D;
+        --{a^n b^n}
+        
+
+{-Gramatica independiente del contexto errores-}
+defG F = A,B,V,G|a,b,b,x,z|A -> a,B,b - B->_ - B -> a,B,b|D; --{a^n b^n}
+
+defG G = A,B,V,G|a,b,b,x,z|A -> a,B,c - B->_ - B -> a,B,b|A; --{a^n b^n}
+
+
+

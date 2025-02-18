@@ -1,0 +1,83 @@
+ 
+{-Automatas de pila definidos estructuralmente-}
+defA A = I,A,B,C,D|A,b,v,y,u|a,x,a,d,e|
+        (I,/,/,x,A)-(A,A,/,a,A)-(A,/,/,/,B)-(B,b,a,/,B)-(B,/,x,/,C)|I|I,C,D;
+        --{a^n b^n}
+         
+        
+defA a = I,A,B,C,d|a,b,c|a,x|
+        (I,/,/,x,A)-(A,a,/,a,A)-(A,/,/,/,d)-(d,b,/,/,d)-(d,/,/,/,B)-(B,c,a,/,B)-(B,/,x,/,C)|I|I,C;
+        --{a^n b^m c^n}
+
+defA b = I,A,B,C,d|a,b,c|a,B,x|
+        (I,/,/,x,A)-(A,a,/,a,A)-(A,/,/,/,d)-(d,b,/,B,d)-(d,/,/,/,B)-(B,c,a,/,B)-(B,c,B,/,B)-(B,/,x,/,C)|I|I,C;
+        --{a^n b^m c^(n+m)}    
+            
+defA auto = f,g,h|c,b|c| (f,c,/,c,g)-(g,b,/,/,g)-(g,c,c,/,h)|f|h;
+
+defA Void = f,g,h|c,b|||f|f;
+
+defA B = I,A,B,C,D,E,F,G|a,b,c,d|a,x|
+        (I,/,/,x,A)-(A,a,/,a,A)-(A,/,/,/,B)-(B,b,/,a,B)-(B,/,/,/,C)-(C,c,a,/,D)-(D,/,a,/,C)
+        -(C,/,/,/,E)-(E,d,a,/,F)-(F,/,a,/,E)-(E,/,x,/,G)|I|I,G;
+        --{a^r b^s c^t d^u |r+t = 2*(t+u) }    
+
+defA p = I,A,B,C|a,b|a,b,x|
+        (I,/,/,x,A)-(A,a,/,a,A)-(A,b,/,b,A)-(A,/,/,/,B)-(A,b,/,/,B)-(A,a,/,/,B)-(B,a,a,/,B)-(B,b,b,/,B)-(B,/,x,/,C)|I|I,C;
+        --{palindromos con alfabeto ab}  
+ 
+defA n = I,A,B,C|a,b|a,b,x|
+        (I,/,/,x,A)-(A,a,/,a,B)-(A,b,/,b,C)-(B,b,a,/,B)-(B,a,/,a,B)-(B,/,x,/,I)-(C,a,b,/,C)-(C,b,/,b,C)-(C,/,x,/,I)|I|I;
+        --{misma cantidad de a's que de b's}          
+           
+defA Q = A,B|a,b|a|(A,a,/,a,A)-(A,b,a,/,B)-(B,b,a,/,B)|A|A,B ; --{a^n b^m,m<=n}   
+
+defA m = A,B,ce,i|a,b|a|(i,a,/,/,A)-(A,a,/,/,B)-(B,a,/,/,B)-(B,b,/,/,ce)-(ce,b,/,/,ce)-(ce,a,/,/,A)-(A,b,/,/,ce)|i|B ; 
+       --{cadenas que empiezan con una a y terminan con 2 a's}  
+
+defA k = i,a,B,c|a,b|a|(i,a,/,/,a)-(a,a,/,/,i)-(a,b,/,/,c)-(c,b,/,/,a)-(c,a,/,/,B)-(B,a,/,/,c)-(B,b,/,/,i)-(i,b,/,/,B)|i|a ; 
+       --{cantidad impar de a's y par de b's}         
+
+{-Gramatica independiente del contexto-}
+defG F = A,B,V,G|a,b,b,x,z|A -> a,B,b - B->_ - B -> a,B,b|A; --{a^n b^n}
+
+defG j = Aab,O|a,b|O -> a -O -> b- O -> a,Aab,a -O -> b,Aab,b - Aab->_ - Aab -> a,Aab- Aab -> b,Aab|O; 
+       --{cadenas que empiezan y terminan con el mismo simbolo}
+
+defG Y = Aab,O,C|a,b,c|O -> a ,Aab,b,C,c - Aab->_ - Aab -> a,Aab,b - C->_ - C -> c,C|O; 
+       --{a^n b^n c^m,n>0}
+
+{-Automatas de pila definidos a travez de expresiones-}
+defE Aup = A Union p; --{a^n b^n o palindromos con alfabeto ab}
+defE bc = Concat b p; --{a^n b^m c^(n+m) + palindromos con alfabeto ab}
+defE pm = *p ;--{(palindromos con alfabeto ab )^n}
+defE Qm = +Q ;--{(a^n b^m,m<=n)^n,n>0}
+
+{-ejecucion de los automatas-}
+bc aacc; --aceptada
+bc aabbccccaba; --aceptada
+bc abbccba;  -- no aceptada
+ 
+b aacc; --aceptada
+b aabbcccc; --aceptada
+b abbcc;  -- no aceptada
+ 
+B aac; --aceptada
+B aabbcd; --aceptada 
+B abbac; --no aceptada
+
+
+p aaa; --aceptada
+p babab; --aceptada 
+p abb; --no aceptada
+
+
+
+
+
+
+
+
+
+
+
